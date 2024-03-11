@@ -1,0 +1,29 @@
+import requests
+
+def adicionar_link(link, arquivo):
+    github_user = 'seu_usuario_github'
+    github_repo = 'seu_repositorio'
+    github_branch = 'main'  # ou outro nome de branch
+
+    # URL do arquivo no repositório do GitHub
+    url = f'https://raw.githubusercontent.com/{github_user}/{github_repo}/{github_branch}/{arquivo}'
+
+    # Obtém o conteúdo atual do arquivo
+    response = requests.get(url)
+    conteudo_atual = response.text.strip()
+
+    # Adiciona o novo link ao conteúdo
+    novo_conteudo = conteudo_atual + f'\n- [{link}]({link})'
+
+    # Envia o novo conteúdo para o arquivo
+    response = requests.put(url, data=novo_conteudo, headers={'Content-Type': 'text/plain'})
+
+    if response.status_code == 200:
+        print("Link adicionado com sucesso!")
+    else:
+        print(f"Erro ao adicionar o link. Código de status: {response.status_code}")
+
+# Exemplo de uso
+link = 'https://www.example.com'
+arquivo = 'links.md'
+adicionar_link(link, arquivo)
